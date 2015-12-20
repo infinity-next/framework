@@ -128,12 +128,19 @@ class FilesystemManager implements FactoryContract
     {
         $permissions = isset($config['permissions']) ? $config['permissions'] : [];
 
+        $flags = 0;
+
         $links = Arr::get($config, 'links') === 'skip'
             ? LocalAdapter::SKIP_LINKS
             : LocalAdapter::DISALLOW_LINKS;
 
+        // Some cloud filesystems do not support exclusive locking.
+        if (!isset($config['lock_ex']) || $config['lock_ex'] !== false) {
+            $flags = LOCK_EX;
+        }
+
         return $this->adapt($this->createFlysystem(new LocalAdapter(
-            $config['root'], LOCK_EX, $links, $permissions
+            $config['root'], $flags, $links, $permissions
         ), $config));
     }
 
