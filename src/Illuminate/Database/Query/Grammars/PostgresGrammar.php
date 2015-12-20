@@ -204,7 +204,7 @@ class PostgresGrammar extends Grammar
                 }
             }
 
-            return "\n".$this->wrap($where['column'])." = any (values (".$values.$suffix."))\n";
+            return "\n".$this->wrap($where['column']).$suffix." = any (values (".$values."))\n";
         }
 
         return $this->wrap($where['column'])." = ".$values;
