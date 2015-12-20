@@ -188,12 +188,16 @@ class PostgresGrammar extends Grammar
     protected function whereIn(Builder $query, $where)
     {
         if (empty($where['values'])) {
-        	return '0 = 1';
+            return '0 = 1';
         }
 
         // Not using parameterize because syntax is any(values (), ())
         $values = implode("'), ('", array_map([$this, 'parameter'], $where['values']));
 
-        return $this->wrap($where['column'])." = any (values ('".$values."'))";
+        if (count($where['values']) > 1) {
+            return "\n".$this->wrap($where['column'])." = any (values ('".$values."'))\n";
+        }
+
+        return $this->wrap($where['column'])." = '".$values."'";
     }
 }
