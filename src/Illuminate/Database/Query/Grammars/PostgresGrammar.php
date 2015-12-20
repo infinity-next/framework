@@ -215,6 +215,6 @@ class PostgresGrammar extends Grammar
             return $this->wrap($where['column'])." = ".$values;
         }
 
-        return "";
+        return "1 = 1";
     }
 }
