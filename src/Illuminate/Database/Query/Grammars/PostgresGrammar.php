@@ -192,10 +192,19 @@ class PostgresGrammar extends Grammar
         }
 
         // Not using parameterize because syntax is any(values (), ())
-        $values = implode("), (", array_map([$this, 'parameter'], $where['values']));
+        $values = implode("),(", array_map([$this, 'parameter'], $where['values']));
 
         if (count($where['values']) > 1) {
-            return "\n".$this->wrap($where['column'])." = any (values (".$values."))\n";
+            $suffix = "::bigint";
+
+            foreach($where['values'] as $value) {
+                if (!is_numeric($value)) {
+                    $suffix = "";
+                    break;
+                }
+            }
+
+            return "\n".$this->wrap($where['column'])." = any (values (".$values.$suffix."))\n";
         }
 
         return $this->wrap($where['column'])." = ".$values;
