@@ -193,7 +193,12 @@ class PostgresGrammar extends Grammar
 
         $suffix = "::BIGINT";
 
-        foreach ($where['values'] as $value) {
+        foreach ($where['values'] as $column => $value) {
+            if (is_null($value)) {
+                $query->orWhereNull($column);
+                continue;
+            }
+
             if (!is_numeric($value)) {
                 $suffix = "::TEXT";
                 break;
@@ -204,9 +209,12 @@ class PostgresGrammar extends Grammar
         $values = implode("{$suffix}),(", array_map([$this, 'parameter'], $where['values']));
 
         if (count($where['values']) > 1) {
-            return $this->wrap($where['column'])." = any (values (".$values."))";
+            return $this->wrap($where['column'])." = any (values (".$values."{$suffix}))";
+        }
+        else if (count($where['values']) === 0) {
+            return $this->wrap($where['column'])." = ".$values;
         }
 
-        return $this->wrap($where['column'])." = ".$values;
+        return "";
     }
 }
