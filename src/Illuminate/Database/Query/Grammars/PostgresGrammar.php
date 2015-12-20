@@ -211,7 +211,7 @@ class PostgresGrammar extends Grammar
         if (count($where['values']) > 1) {
             return $this->wrap($where['column'])." = any (values (".$values."{$suffix}))";
         }
-        else if (count($where['values']) === 0) {
+        else if (count($where['values']) === 1) {
             return $this->wrap($where['column'])." = ".$values;
         }
 
