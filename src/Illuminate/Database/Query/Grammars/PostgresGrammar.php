@@ -177,4 +177,20 @@ class PostgresGrammar extends Grammar
     {
         return ['truncate '.$this->wrapTable($query->from).' restart identity' => []];
     }
+
+    /**
+     * Compile a "where in" clause.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $where
+     * @return string
+     */
+    protected function whereIn(Builder $query, $where)
+    {
+        if (empty($where['values'])) {
+            return '0 = 1';
+        }
+        $values = $this->parameterize($where['values']);
+        return $this->wrap($where['column']).' any (values('.$values.'))';
+    }
 }
