@@ -191,20 +191,20 @@ class PostgresGrammar extends Grammar
             return '0 = 1';
         }
 
+        $suffix = "::BIGINT";
+
+        foreach ($where['values'] as $value) {
+            if (!is_numeric($value)) {
+                $suffix = "::TEXT";
+                break;
+            }
+        }
+
         // Not using parameterize because syntax is any(values (), ())
-        $values = implode("),(", array_map([$this, 'parameter'], $where['values']));
+        $values = implode("{$suffix}),(", array_map([$this, 'parameter'], $where['values']));
 
         if (count($where['values']) > 1) {
-            $suffix = "::bigint";
-
-            foreach($where['values'] as $value) {
-                if (!is_numeric($value)) {
-                    $suffix = "";
-                    break;
-                }
-            }
-
-            return "\n".$this->wrap($where['column']).$suffix." = any (values (".$values."))\n";
+            return $this->wrap($where['column'])." = any (values (".$values."))";
         }
 
         return $this->wrap($where['column'])." = ".$values;
