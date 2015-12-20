@@ -190,8 +190,10 @@ class PostgresGrammar extends Grammar
         if (empty($where['values'])) {
         	return '0 = 1';
         }
+
         // Not using parameterize because syntax is any(values (), ())
-        $values = implode('), (', array_map([$this, 'parameter'], $where['values']));
-        return $this->wrap($where['column']).' = any (values ('.$values.'))';
+        $values = implode("'), ('", array_map([$this, 'parameter'], $where['values']));
+
+        return $this->wrap($where['column'])." = any (values ('".$values."'))";
     }
 }
