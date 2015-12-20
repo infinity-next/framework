@@ -192,7 +192,6 @@ class PostgresGrammar extends Grammar
         }
         // Not using parameterize because syntax is any(values (), ())
         $values = implode('), (', array_map([$this, 'parameter'], $values));
-        
         return $this->wrap($where['column']).' = any (values ('.$values.'))';
     }
 }
