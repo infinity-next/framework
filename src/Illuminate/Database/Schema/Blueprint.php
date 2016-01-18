@@ -830,6 +830,28 @@ class Blueprint
     }
 
     /**
+     * Create a new inet column on the table.
+     *
+     * @param  string  $column
+     * @return \Illuminate\Support\Fluent
+     */
+    public function inet($column)
+    {
+        return $this->addColumn('inet', $column);
+    }
+
+    /**
+     * Create a new cidr column on the table.
+     *
+     * @param  string  $column
+     * @return \Illuminate\Support\Fluent
+     */
+    public function cidr($column)
+    {
+        return $this->addColumn('cidr', $column);
+    }
+
+    /**
      * Create a new uuid column on the table.
      *
      * @param  string  $column

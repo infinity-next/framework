@@ -516,7 +516,31 @@ class PostgresGrammar extends Grammar
     }
 
     /**
-     * Create the column definition for a uuid type.
+    * Create the column definition for an inet type.
+    *
+    * @param  \Illuminate\Support\Fluent  $column
+    * @return string
+    */
+    protected function typeInet(Fluent $column)
+    {
+        return 'inet';
+    }
+
+    /**
+    * Create the column definition for a cidr type.
+    *
+    * @param  \Illuminate\Support\Fluent  $column
+    * @return string
+    */
+    protected function typeCidr(Fluent $column)
+    {
+        return 'cidr';
+    }
+
+   /**
+	 * Create the column definition for a uuid type.
+	 *
+	 * @param  \Illuminate\Support\Fluent  $column
      *
      * @param  \Illuminate\Support\Fluent  $column
      * @return string
