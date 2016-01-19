@@ -277,14 +277,15 @@ class UrlGenerator implements UrlGeneratorContract
     /**
      * Force the schema for URLs.
      *
-     * @param  string  $schema
+     * @param  string   $schema
+	 * @param  boolean  $appendSlashes
      * @return void
      */
-    public function forceSchema($schema)
+    public function forceSchema($schema, $appendSlashes = true)
     {
         $this->cachedSchema = null;
 
-        $this->forceSchema = $schema.'://';
+        $this->forceSchema = $schema.($appendSlashes ? '://' : '');
     }
 
     /**
